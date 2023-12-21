@@ -48,7 +48,6 @@ int main(void)
 
     /* Display the image buffer */
     epd.DisplayFrame(gImage_1);
-    bcm2835_delay(20000);  
     epd.Sleep(); //EPD_sleep,Sleep instruction is necessary, please do not delete!!!
     while(1);
     return 0;
