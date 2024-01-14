@@ -5,10 +5,7 @@ const unsigned char gImage_1[] = {
 
 
 from PIL import Image
-import pdb
 import io
-
-
 import sys
 
 if len(sys.argv) > 1:
@@ -18,21 +15,20 @@ if len(sys.argv) > 1:
 else:
     print("No argument provided.")
 
-with Image.open(image_path) as img:
-    # Resize the image
-    img = img.resize((800, 600))
 
-    # Convert image to byte array
-    img_byte_arr = io.BytesIO()
-    img.save(img_byte_arr, format="JPEG")
-    img_byte_arr = img_byte_arr.getvalue()
-    # pdb.set_trace()
-    # f = image.read()
-    # img_byte_arr = bytearray(f)
-    for i in range(0, len(img_byte_arr)):
-        if i > 0:
-            out += ", "
-        out += str("0x{:02x}".format(img_byte_arr[i]))
+import cv2
+
+im = cv2.imread(image_path)
+im_resize = cv2.resize(im, (500, 500))
+
+is_success, im_buf_arr = cv2.imencode(".jpg", im_resize)
+img_byte_arr = im_buf_arr.tobytes()
+
+print(img_byte_arr)
+for i in range(0, len(img_byte_arr)):
+    if i > 0:
+        out += ", "
+    out += str("0x{:02x}".format(img_byte_arr[i]))
 out += """
 };
 """
@@ -47,6 +43,7 @@ out += """
 #         if i > 0:
 #             out += ", "
 #         out += str("0x{:02x}".format(b[i]))
+#         print(i)
 # out += """
 # };
 # """
